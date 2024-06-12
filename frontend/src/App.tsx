@@ -1,137 +1,21 @@
-import { connectService } from "./services/connect.service";
-import { PopupDialog } from "./components/PopupDialog";
-import { useEffect, useState } from "react";
-import { InfoCard } from "./components/InfoCard";
-import { TransactionCard } from "./components/TransactionCard";
-import { CircleCheck } from "lucide-react";
-
-import { Account, UserInfo, Bank, Transaction } from "./interfaces/connect";
+import { ConnectPage } from "./components/ConnectPage";
+import bankhub from "./assets/bankhub.png";
 function App() {
-    const [link, setLink] = useState<string>("");
-    const [connectValue, setConnectValue] = useState<boolean>(false);
-    const [transaction, setTransaction] = useState<UserInfo | null>(null);
-    const [bank, setBank] = useState<Bank>({ name: "", logo: "", code: "" });
-    const [accessToken, setAccessToken] = useState<string>("");
-    const handleConnectBank = async () => {
-        const link = await connectService.createLink();
-        setLink(link);
-        setConnectValue(false);
-        setTransaction(null);
-    };
-    const handleTransaction = async () => {
-        if (connectValue) {
-            const transaction = await connectService.getTransaction();
-            setTransaction(transaction);
-        }
-    };
-    const handleGetAccessToken = async () => {
-        const accessToken = await connectService.getAccessToken();
-
-        setAccessToken(accessToken);
-    };
-    useEffect(() => {
-        if (transaction) {
-            setBank({
-                name: transaction.fiService.name,
-                logo: transaction.fiService.logo,
-                code: transaction.fiService.code,
-            });
-        }
-    }, [transaction]);
-
     return (
-        <div className="flex items-center justify-center p-10">
-            <div className="flex flex-col gap-y-3">
-                <div className="flex items-center gap-x-4">
-                    <h1 className="text-4xl font-bold">Liên kết ngân hàng</h1>
-                    <button
-                        className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
-                        onClick={handleConnectBank}
-                    >
-                        Liên kết
-                    </button>
+        <div className="flex items-center justify-center p-10 text-white bg-[#333]">
+            <div className="flex items-start">
+                <div className="flex flex-col p-2 mt-8 gap-y-8">
+                    <h1 className="text-4xl font-bold">
+                        Quản lý nhiều ngân hàng một chỗ với bankHub
+                    </h1>
+                    <ConnectPage />
                 </div>
-                <PopupDialog
-                    open={!!link}
-                    link={link}
-                    onClose={() => setLink("")}
-                    onSuccess={setConnectValue}
-                />
-                {connectValue && (
-                    <>
-                        <div className="flex flex-col items-center gap-y-2">
-                            <CircleCheck
-                                size={128}
-                                color="#00ff62"
-                                strokeWidth={2.25}
-                            />
-                            <span className="text-2xl font-bold">
-                                Liên kết thành công
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-x-4">
-                            <h1 className="text-4xl font-bold">
-                                Tra cứu Access Token
-                            </h1>
-                            <button
-                                className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
-                                onClick={handleGetAccessToken}
-                            >
-                                Tra cứu
-                            </button>
-                        </div>
-                        {accessToken && (
-                            <pre className="max-w-[1024px] overflow-auto mx-auto p-2">
-                                {accessToken}
-                            </pre>
-                        )}
-                    </>
-                )}
-                {transaction ? (
-                    // <pre className="max-w-[800px] overflow-auto">
-                    //     {JSON.stringify(transaction, null, 2)}
-                    // </pre>
-                    <>
-                        <span className="text-4xl font-bold">
-                            Thông tin tài khoản
-                        </span>
 
-                        <div className="flex items-center justify-center">
-                            {transaction.accounts.map((account: Account) => (
-                                <InfoCard
-                                    key={account.accountNumber}
-                                    account={account}
-                                    bank={bank}
-                                />
-                            ))}
-                        </div>
-                        <span className="text-4xl font-bold">
-                            Lịch sử giao dịch
-                        </span>
-                        <div className="flex flex-col items-center justify-center gap-y-4">
-                            {transaction.transactions.map(
-                                (transaction: Transaction) => (
-                                    <TransactionCard
-                                        key={transaction.reference}
-                                        transaction={transaction}
-                                    />
-                                )
-                            )}
-                        </div>
-                    </>
-                ) : (
-                    <div className="flex items-center gap-x-4">
-                        <h1 className="text-4xl font-bold">
-                            Tra cứu thông tin
-                        </h1>
-                        <button
-                            className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
-                            onClick={handleTransaction}
-                        >
-                            Tra cứu
-                        </button>
-                    </div>
-                )}
+                <img
+                    src={bankhub}
+                    alt="BankHub"
+                    className="sticky top-0 right-0 p-4"
+                />
             </div>
         </div>
     );

@@ -1,4 +1,5 @@
 import { Account, Bank } from "../interfaces/connect";
+import cardChip from "../assets/cardchip.png";
 export const InfoCard = ({
     account,
     bank,
@@ -17,7 +18,13 @@ export const InfoCard = ({
         <div
             className={`w-4/5 p-6 text-white bg-[${color}] rounded shadow-lg cursor-pointer select-none border-1`}
         >
-            <div className="flex flex-col gap-y-4">
+            <div className="relative flex flex-col gap-y-4">
+                <img
+                    src={cardChip}
+                    alt="Card Chip"
+                    className="absolute top-0 right-0 w-20 h-20 -translate-x-1/2 translate-y-1/2"
+                />
+
                 <div className="flex items-center gap-x-4">
                     <img
                         src={bank.logo}
