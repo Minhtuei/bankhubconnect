@@ -1,5 +1,7 @@
 import express from 'express';
-const router = express.Router();
+const connectRouter = express.Router();
 import { connectController } from '../../controllers/connect/index';
-router.get('/connect', connectController.createLink);
-export default router;
+connectRouter.get('/connect', connectController.createLink);
+connectRouter.post('/exchange-token', connectController.exchangeToken);
+connectRouter.get('/transaction', connectController.getTransaction);
+export default connectRouter;

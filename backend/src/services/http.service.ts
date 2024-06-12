@@ -9,8 +9,19 @@ class http {
         }
         return http.instance;
     }
-    async get(url: string) {
-        return axios.get(url);
+    async get(url: string, accessToken: string) {
+        let config = {
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: url,
+            headers: {
+                'Accept': 'application/json',
+                'x-client-id': `${process.env.CLIENT_ID}`,
+                'x-secret-key': `${process.env.SECRET_KEY}`,
+                'Authorization': accessToken
+            }
+        };
+        return axios(config);
     }
     async post(url: string, data: any) {
         let config = {
