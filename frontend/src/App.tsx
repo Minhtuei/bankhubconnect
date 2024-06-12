@@ -3,6 +3,8 @@ import { PopupDialog } from "./components/PopupDialog";
 import { useEffect, useState } from "react";
 import { InfoCard } from "./components/InfoCard";
 import { TransactionCard } from "./components/TransactionCard";
+import { CircleCheck } from "lucide-react";
+
 import {
     Account,
     ConnectValue,
@@ -15,6 +17,7 @@ function App() {
     const [connectValue, setConnectValue] = useState<ConnectValue | null>(null);
     const [transaction, setTransaction] = useState<UserInfo | null>(null);
     const [bank, setBank] = useState<Bank>({ name: "", logo: "" });
+    const [accessToken, setAccessToken] = useState<string>("");
     const handleConnectBank = async () => {
         const link = await connectService.createLink();
         setLink(link);
@@ -23,11 +26,14 @@ function App() {
     };
     const handleTransaction = async () => {
         if (connectValue) {
-            const transaction = await connectService.getTransaction(
-                connectValue.accessToken
-            );
+            const transaction = await connectService.getTransaction();
             setTransaction(transaction);
         }
+    };
+    const handleGetAccessToken = async () => {
+        const accessToken = await connectService.getAccessToken();
+
+        setAccessToken(accessToken);
     };
     useEffect(() => {
         if (transaction) {
@@ -57,17 +63,42 @@ function App() {
                     }
                 />
                 {connectValue && (
-                    <pre className="max-w-[800px] overflow-auto">
-                        {JSON.stringify(connectValue, null, 2)}
-                    </pre>
+                    <>
+                        <div className="flex flex-col items-center gap-y-2">
+                            <CircleCheck
+                                size={128}
+                                color="#00ff62"
+                                strokeWidth={2.25}
+                            />
+                            <span className="text-2xl font-bold">
+                                Liên kết thành công
+                            </span>
+                        </div>
+                        <h1 className="text-4xl font-bold">
+                            Tra cứu Access Token
+                        </h1>
+                        <button
+                            className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
+                            onClick={handleGetAccessToken}
+                        >
+                            Tra cứu
+                        </button>
+                        {accessToken && (
+                            <pre className="max-w-[1024px] overflow-auto mx-auto p-2">
+                                {accessToken}
+                            </pre>
+                        )}
+                        <h1 className="text-4xl font-bold">
+                            Tra cứu thông tin
+                        </h1>
+                        <button
+                            className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
+                            onClick={handleTransaction}
+                        >
+                            Tra cứu
+                        </button>
+                    </>
                 )}
-                <h1 className="text-4xl font-bold">Tra cứu thông tin</h1>
-                <button
-                    className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
-                    onClick={handleTransaction}
-                >
-                    Tra cứu
-                </button>
                 {transaction && (
                     // <pre className="max-w-[800px] overflow-auto">
                     //     {JSON.stringify(transaction, null, 2)}

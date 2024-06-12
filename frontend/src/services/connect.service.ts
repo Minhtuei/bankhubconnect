@@ -21,15 +21,20 @@ export const connectService = {
         }
     }
     ,
-    async getTransaction(accessToken: string) {
+    async getTransaction() {
         try {
-            const response = await http.get('/transaction', {
-                headers: {
-                    Authorization: accessToken,
-                },
-            });
+            const response = await http.get('/transaction');
             const transaction = response.data;
             return transaction;
+        } catch (error) {
+            console.error(error);
+        }
+    },
+    async getAccessToken() {
+        try {
+            const response = await http.get('/access-token');
+            const accessToken = response.data.accessToken;
+            return accessToken;
         } catch (error) {
             console.error(error);
         }

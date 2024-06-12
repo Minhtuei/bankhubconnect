@@ -1,7 +1,10 @@
 import sqlite3 from 'sqlite3';
 import fs from 'fs';
 import path from 'path';
-
+interface Token {
+    id: number;
+    token: string;
+}
 class Database {
     private static instance: Database;
     private db: sqlite3.Database;
@@ -60,8 +63,19 @@ class Database {
             });
         });
     }
-}
+    public getLatestToken(): Promise<string> {
+        return new Promise((resolve, reject) => {
+            this.db.get('SELECT token FROM tokens ORDER BY id DESC LIMIT 1', (err, row: Token) => {
+                if (err) {
+                    reject('Error getting latest token: ' + err.message);
+                } else {
+                    resolve(row.token);
+                }
+            });
+        });
+    }
 
+}
 // Export the singleton instance
 const db = Database.getInstance();
 export default db;

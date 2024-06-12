@@ -26,7 +26,8 @@ export const InfoCard = ({
                         {account.accountName}
                     </span>
                     <span className="text-2xl font-bold">
-                        {account.balance.toLocaleString()} {account.currency}
+                        Số dư: {account.balance.toLocaleString()}{" "}
+                        {account.currency}
                     </span>
                 </div>
             </div>

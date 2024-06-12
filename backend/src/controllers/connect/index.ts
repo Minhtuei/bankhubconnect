@@ -35,12 +35,21 @@ const connectController = {
     ,
     async getTransaction(req: Request, res: Response) {
         try {
-            const accessToken = req.headers.authorization;
+            const accessToken = await db.getLatestToken();
             if (!accessToken) {
                 return res.status(400).json({ message: "accessToken is required" });
             }
             const response = await http.get(`${process.env.BASE_URL}/transactions`, accessToken);
             return res.status(200).json(response.data);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json(error);
+        }
+    },
+    async getAccessToken(req: Request, res: Response) {
+        try {
+            const accessToken = await db.getLatestToken();
+            return res.status(200).json({ accessToken });
         } catch (error) {
             console.error(error);
             return res.status(500).json(error);
