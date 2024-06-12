@@ -11,11 +11,9 @@ export const connectService = {
     },
     async exchangeToken(publicToken: string) {
         try {
-            const response = await http.post('/exchange-token', {
+            await http.post('/exchange-token', {
                 publicToken,
             });
-            const accessToken = response.data;
-            return accessToken;
         } catch (error) {
             console.error(error);
         }

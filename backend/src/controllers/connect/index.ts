@@ -26,7 +26,7 @@ const connectController = {
             });
             const accessToken = response.data.accessToken;
             await db.insertToken(accessToken);
-            return res.status(200).json(response.data);
+            return res.status(200).json({ message: "Token exchanged successfully" });
         } catch (error) {
             console.error(error);
             return res.status(500).json(error);

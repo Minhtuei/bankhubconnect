@@ -5,23 +5,17 @@ import { InfoCard } from "./components/InfoCard";
 import { TransactionCard } from "./components/TransactionCard";
 import { CircleCheck } from "lucide-react";
 
-import {
-    Account,
-    ConnectValue,
-    UserInfo,
-    Bank,
-    Transaction,
-} from "./interfaces/connect";
+import { Account, UserInfo, Bank, Transaction } from "./interfaces/connect";
 function App() {
     const [link, setLink] = useState<string>("");
-    const [connectValue, setConnectValue] = useState<ConnectValue | null>(null);
+    const [connectValue, setConnectValue] = useState<boolean>(false);
     const [transaction, setTransaction] = useState<UserInfo | null>(null);
-    const [bank, setBank] = useState<Bank>({ name: "", logo: "" });
+    const [bank, setBank] = useState<Bank>({ name: "", logo: "", code: "" });
     const [accessToken, setAccessToken] = useState<string>("");
     const handleConnectBank = async () => {
         const link = await connectService.createLink();
         setLink(link);
-        setConnectValue(null);
+        setConnectValue(false);
         setTransaction(null);
     };
     const handleTransaction = async () => {
@@ -40,6 +34,7 @@ function App() {
             setBank({
                 name: transaction.fiService.name,
                 logo: transaction.fiService.logo,
+                code: transaction.fiService.code,
             });
         }
     }, [transaction]);
@@ -47,20 +42,20 @@ function App() {
     return (
         <div className="flex items-center justify-center p-10">
             <div className="flex flex-col gap-y-3">
-                <h1 className="text-4xl font-bold">Liên kết ngân hàng</h1>
-                <button
-                    className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
-                    onClick={handleConnectBank}
-                >
-                    Liên kết
-                </button>
+                <div className="flex items-center gap-x-4">
+                    <h1 className="text-4xl font-bold">Liên kết ngân hàng</h1>
+                    <button
+                        className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
+                        onClick={handleConnectBank}
+                    >
+                        Liên kết
+                    </button>
+                </div>
                 <PopupDialog
                     open={!!link}
                     link={link}
                     onClose={() => setLink("")}
-                    onSuccess={(connectValue: ConnectValue) =>
-                        setConnectValue(connectValue)
-                    }
+                    onSuccess={setConnectValue}
                 />
                 {connectValue && (
                     <>
@@ -74,32 +69,25 @@ function App() {
                                 Liên kết thành công
                             </span>
                         </div>
-                        <h1 className="text-4xl font-bold">
-                            Tra cứu Access Token
-                        </h1>
-                        <button
-                            className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
-                            onClick={handleGetAccessToken}
-                        >
-                            Tra cứu
-                        </button>
+                        <div className="flex items-center gap-x-4">
+                            <h1 className="text-4xl font-bold">
+                                Tra cứu Access Token
+                            </h1>
+                            <button
+                                className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
+                                onClick={handleGetAccessToken}
+                            >
+                                Tra cứu
+                            </button>
+                        </div>
                         {accessToken && (
                             <pre className="max-w-[1024px] overflow-auto mx-auto p-2">
                                 {accessToken}
                             </pre>
                         )}
-                        <h1 className="text-4xl font-bold">
-                            Tra cứu thông tin
-                        </h1>
-                        <button
-                            className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
-                            onClick={handleTransaction}
-                        >
-                            Tra cứu
-                        </button>
                     </>
                 )}
-                {transaction && (
+                {transaction ? (
                     // <pre className="max-w-[800px] overflow-auto">
                     //     {JSON.stringify(transaction, null, 2)}
                     // </pre>
@@ -131,6 +119,18 @@ function App() {
                             )}
                         </div>
                     </>
+                ) : (
+                    <div className="flex items-center gap-x-4">
+                        <h1 className="text-4xl font-bold">
+                            Tra cứu thông tin
+                        </h1>
+                        <button
+                            className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
+                            onClick={handleTransaction}
+                        >
+                            Tra cứu
+                        </button>
+                    </div>
                 )}
             </div>
         </div>

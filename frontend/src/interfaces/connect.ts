@@ -12,6 +12,7 @@ interface Account {
 interface Bank {
     name: string;
     logo: string;
+    code: string;
 }
 interface Transaction {
     transactionDateTime: string;
