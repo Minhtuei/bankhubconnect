@@ -16,7 +16,8 @@ export const InfoCard = ({
     const color = ColorBank[bank.code as keyof typeof ColorBank] ?? "#59a892";
     return (
         <div
-            className={`w-4/5 p-6 text-white bg-[${color}] rounded shadow-lg cursor-pointer select-none border-1`}
+            className={`w-4/5 p-6 text-white rounded shadow-lg cursor-pointer select-none border-1`}
+            style={{ backgroundColor: color }}
         >
             <div className="relative flex flex-col gap-y-4">
                 <img

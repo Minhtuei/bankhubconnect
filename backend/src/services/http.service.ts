@@ -23,7 +23,7 @@ class http {
         };
         return axios(config);
     }
-    async post(url: string, data: any) {
+    async post(url: string, data: any, accessToken: string) {
         let config = {
             method: 'post',
             url: url,
@@ -31,10 +31,12 @@ class http {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
                 'x-client-id': `${process.env.CLIENT_ID}`,
-                'x-secret-key': `${process.env.SECRET_KEY}`
+                'x-secret-key': `${process.env.SECRET_KEY}`,
+                'Authorization': accessToken ? accessToken : ''
             },
             data: data
         };
+
         return axios(config);
     }
 }

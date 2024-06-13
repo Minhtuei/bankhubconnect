@@ -36,5 +36,12 @@ export const connectService = {
         } catch (error) {
             console.error(error);
         }
+    },
+    async createQRCode() {
+        try {
+            await http.get('/qr-code');
+        } catch (error) {
+            console.error(error);
+        }
     }
 };

@@ -29,6 +29,10 @@ export function ConnectPage() {
 
         setAccessToken(accessToken);
     };
+    // const handleCreateQRCode = async () => {
+    //     const response = await connectService.createQRCode();
+    //     console.log(response);
+    // };
     useEffect(() => {
         if (transaction) {
             setBank({
@@ -84,6 +88,15 @@ export function ConnectPage() {
                             {accessToken}
                         </pre>
                     )}
+                    {/* <div className="flex items-center gap-x-4">
+                        <h1 className="text-3xl font-bold">Tạo mã QR:</h1>
+                        <button
+                            className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
+                            onClick={handleCreateQRCode}
+                        >
+                            Tạo mã
+                        </button>
+                    </div> */}
                 </>
             )}
             {transaction ? (
@@ -124,6 +137,7 @@ export function ConnectPage() {
                     <button
                         className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
                         onClick={handleTransaction}
+                        disabled={!connectValue}
                     >
                         Tra cứu
                     </button>
